@@ -46,6 +46,7 @@ const Home = () => {
     <div>
       <button onClick={goToBasket}>Baskete Page</button>
       <button onClick={() => navigation('/register')}>Register Page</button>
+      <button onClick={() => navigation('/products')}>Products Page</button>
 
       {currentProducts.map((item) => (
         <ProductCard

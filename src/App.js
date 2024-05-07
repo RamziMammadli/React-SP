@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Router from "./Router/Router";
 import { MainContext } from "./Context/context";
 import axios from "axios";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 const App = () => {
   const [products, setProducts] = useState([]);
@@ -14,13 +16,15 @@ const App = () => {
     });
   }, []);
 
-  const data = { products, setProducts, student, setStudent, setColor, color };
+  const data = { products, setProducts, student, color, setColor };
 
   return (
     <div>
-      <MainContext.Provider value={data}>
-        <Router />
-      </MainContext.Provider>
+      <Provider store={store}>
+        <MainContext.Provider value={data}>
+          <Router />
+        </MainContext.Provider>
+      </Provider>
     </div>
   );
 };
