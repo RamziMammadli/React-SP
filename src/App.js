@@ -3,7 +3,7 @@ import Router from "./Router/Router";
 import { MainContext } from "./Context/context";
 import axios from "axios";
 import { Provider } from "react-redux";
-import { store } from "./store/store";
+import { store } from "./Store/store";
 
 const App = () => {
   const [products, setProducts] = useState([]);
