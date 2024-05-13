@@ -3,18 +3,21 @@ import axios from "axios"
 
 export const getSliceThunk = createAsyncThunk('api/get', async () => {
     const res = await axios.get('https://northwind.vercel.app/api/categories')
-    console.log(res.data)
     return res.data
 })
 
 export const postSliceThunk = createAsyncThunk('api/post', async (data) => {
-    const res = await axios.post('https://northwind.vercel.app/api/categories', data)
-    console.log(res)
+    await axios.post('https://northwind.vercel.app/api/categories', data)
 })
 
 export const deleteSliceThunk = createAsyncThunk('api/delete', async (id) => {
     await axios.delete(`https://northwind.vercel.app/api/categories/${id}`)
 })
+
+export const updateSliceThunk = createAsyncThunk('api/update', async ({ id, data }) => {
+    await axios.patch(`https://northwind.vercel.app/api/categories/${id}`, data);
+});
+
 
 const getSlice = createSlice({
     name:'getSlice',
@@ -63,6 +66,17 @@ const getSlice = createSlice({
         .addCase(deleteSliceThunk.rejected, (state, action) => {
             state.loading = false
             state.error = action.error.message
+        })
+        //UPDATE
+        .addCase(updateSliceThunk.fulfilled, (state, action) => {
+            state.loading = false;
+        })
+        .addCase(updateSliceThunk.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(updateSliceThunk.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
         })
         
     }

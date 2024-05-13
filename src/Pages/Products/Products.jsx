@@ -6,18 +6,28 @@ import {
   deleteSliceThunk,
   getSliceThunk,
   postSliceThunk,
+  updateSliceThunk,
 } from "../../Store/Reducers/getSlice";
 
 const Products = () => {
   const [name, setName] = useState("");
   const [des, setDes] = useState("");
+  const [id, setId] = useState("");
+  const [updatedName, setUpdatedName] = useState("");
+  const [updatedDes, setUpdatedDes] = useState("");
+
   const dispatch = useDispatch();
 
   const data = useSelector((state) => state.getSlice.products);
-  // console.log("some", data);
+  const loading = useSelector((state) => state.getSlice.loading);
+  const error = useSelector((state) => state.getSlice.error);
+
+  const getData = () => {
+    dispatch(getSliceThunk())
+  }
 
   useEffect(() => {
-    dispatch(getSliceThunk());
+    getData()
   }, []);
 
   const sendInfo = () => {
@@ -28,15 +38,20 @@ const Products = () => {
   };
 
   const deletePost = (id) => {
-    dispatch(deleteSliceThunk(id))
-    dispatch(deletePostt(id))
-  }
+    dispatch(deleteSliceThunk(id));
+    dispatch(deletePostt(id));
+  };
 
-  
+  const updateData = () => {
+    dispatch(updateSliceThunk({id:id, data:{name:updatedName, description: updatedDes}}))
+    setTimeout(() => {
+      getData()
+    }, 300);
+  }
 
   return (
     <div>
-      <input
+      <div><input
         type="text"
         name=""
         id=""
@@ -50,13 +65,23 @@ const Products = () => {
         value={des}
         onChange={(e) => setDes(e.target.value)}
       />
-      <button onClick={sendInfo}>Gonder</button>
+      <button onClick={sendInfo}>Gönder</button></div>
+      <div>
+        <input type="text" name="" id="" value={id} onChange={(e) => setId(e.target.value)}/>
+        <input type="text" name="" id="" value={updatedName} onChange={(e) => setUpdatedName(e.target.value)}/>
+        <input type="text" name="" id="" value={updatedDes} onChange={(e) => setUpdatedDes(e.target.value)}/>
+        <button onClick={updateData}>Guncelle</button>
+      </div>
+
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
+
       {data &&
         data.map((item) => {
           return (
             <div>
               <p>{item.name}</p>
-              <button onClick={() => deletePost(item.id)}>Sil</button>
+              <button onClick={deletePost}>Sil</button>
             </div>
           );
         })}
